@@ -18,6 +18,7 @@
 </template>
 <script src="http://apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
 <script>
+
 import Base64 from "crypto-js/enc-base64";
 import { KJUR } from "jsrsasign";
 import { async } from "q";
@@ -40,45 +41,40 @@ export default {
   methods: {
     async exacution(message) {
       const utf8 = require("utf8");
+      let rsa = require("js-crypto-rsa");
+      let sha = require("crypto-js");
       //const crypto = require("crypto-js");
       //console.log(message)
       //const privateKey ="MIIBOgIBAAJAYn8taNMlCb/ZvyI9kVqLfp+2yLFPihNU3qR028hT9jMfphd35MN+dqochu8hwRZghGvWf7lgsDdhKo8TYJ/LzQIDAQABAkAcAP6fJBEOwY4eKpUIo46vlKc6TjdIEZD6sBVNe5prj+cWGXYSI061NnxyaolWHM4wRPnlr5xvsRkNih0kMIlhAiEAxOjFLWchDlsnCKKhTDesBXHAx77I4+WjLMBkBQNvMXkCIQCADgfrSNgFu4O24TMBUHOLBW9p/9t6j7on0iutwq9L9QIhAIbyR3+QN/VQvvWKDyTe2oN4q/e4ZpDY5fVbfLB65A9xAiAKsCEdFEFjiRkfRICbVXmvWs7HzCEng6OH+1TF9f/nmQIhAIyUm7cJD3rIjQTEjq+prh5ghXJFPl4e/ivw71ahBqnU";
       const privateKey =
-        "-----BEGIN RSA PRIVATE KEY-----MIICXAIBAAKBgQC5wrJeqBGq7t3/v702TFEnjtb9ulgQJOn3wVdYzPm1H9T06yxYZv8mQaUbZWmpF5yaBfSGgTV8dQTcKlZTUEB3KE9WS8YJ3SqLKPL7loG4kdpSuzc9+HUGeCL8zegPz4CwYKNjbDn6/7voGi47zBS8wbGIYbJTBOb9TGv1sEdpVwIDAQABAoGAYP9OPmkKWLREDaBkP68YDUzj7Ddadouf9DPr1T2rAi3t+Dm4vSyC/Mn4WdbZlmby6eZEKdvcPvGnqQMecoCMOAhFqPVYFF/5QqQZa5Gs1e7m+wZrjtIeH9xQGQ4JKkvufPDZZbT9wLA+N1Y36Jw39ZFDF3taMSEqCbAh1KaQujECQQDkN5fSlDecLc92kOPvPxzaItH+tYisRZe9+eVnp8/B63UznDBavw5bnmVwKrotXD3bTkTQdxisn56Ip5Peh1dfAkEA0F/we4GCPSy9gw8rnIPGvdoI5CKxYzgSsBOkKCqRgrf842omsxtK2qiNK97vHYXzGtaNYH0usdConwpBGG0JCQJBALrXROYzUJ/95WdF0kbyXdW9Qj2NNBsOUuBHMmi9u9sgwXCChBgXaVLbCGNfp9MxPLdKig4+IyZY/DsXL3m1RnMCQBlZoqMT5WlV2RRpsw+OhI4ySWSfx97fQn7DVPRCAYPaqFxuXJjrmBaz7MDKlWKNGj9InNiBQj4FuY3nrHWxRikCQF6GeLydMQuUaBgGKCHzGMbkgtDq+MmCc6neccMWB79E1rbDHWgsJ7bc8uHLokSWgV/X9nxHs5UiBCcCELCvnAY=-----END RSA PRIVATE KEY-----";
+        "-----BEGIN RSA PRIVATE KEY-----MIIBOgIBAAJAYn8taNMlCb/ZvyI9kVqLfp+2yLFPihNU3qR028hT9jMfphd35MN+dqochu8hwRZghGvWf7lgsDdhKo8TYJ/LzQIDAQABAkAcAP6fJBEOwY4eKpUIo46vlKc6TjdIEZD6sBVNe5prj+cWGXYSI061NnxyaolWHM4wRPnlr5xvsRkNih0kMIlhAiEAxOjFLWchDlsnCKKhTDesBXHAx77I4+WjLMBkBQNvMXkCIQCADgfrSNgFu4O24TMBUHOLBW9p/9t6j7on0iutwq9L9QIhAIbyR3+QN/VQvvWKDyTe2oN4q/e4ZpDY5fVbfLB65A9xAiAKsCEdFEFjiRkfRICbVXmvWs7HzCEng6OH+1TF9f/nmQIhAIyUm7cJD3rIjQTEjq+prh5ghXJFPl4e/ivw71ahBqnU-----END RSA PRIVATE KEY-----";
 
       var CryptoJS = require("crypto-js");
       let data = { msg: "thisisamessage" };
       let parseData = [];
       for (let key in data) {
-        parseData.push(`${key}=${data[key]}`);
+        parseData.push(`${key}=${data[key]}`)
       }
-      const parsedStr = parseData.join("&");
-      console.log(parsedStr);
+      const parsedStr = parseData.join('&')
+      console.log(parsedStr)
       const hashDigest = CryptoJS.SHA256(parsedStr);
       const input = hashDigest.toString();
       console.log("input->>>>>", input);
-      // console.log(
-      //   "HMACSHA1 :",
-      //   CryptoJS.HmacSHA1(input, "finalProject").toString()
-      // );
+      console.log(
+        "HMACSHA1 :",
+        CryptoJS.HmacSHA1(input, "finalProject").toString()
+      );
       //////////////////////////////////////////////////////////////////////
 
       var crypto = require("crypto");
-      var pk = new JSEncrypt();
-      pk.setPrivateKey(privateKey);
-      const sig = pk.sign(input, CryptoJS.SHA256, "sha256");
-      console.log(btoa(sig))
-
       var aaa = this.model.msg;
-      var signer = crypto.createSign("RSA-SHA512");
-      signer.write(
-        "aea65ca2805777fa02917065d211e9db58f747e6b20b732aa825311ed17292b7",
-        "base64"
-      );
+      var signer = crypto.createSign("RSA-SHA1");
+      signer.write('a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', "base64");
       signer.end();
       this.model.signature = signer.sign(privateKey, "base64");
-      // console.log("ggggggg =>", this.model.signature);
+      console.log("ggggggg =>", this.model.signature);
 
+      
       /*var crypto = require('crypto');
       var sign = crypto.createSign('RSA-SHA256');
       sign.update(input);
@@ -100,7 +96,7 @@ export default {
             Authorization: "JWT" + " " + localStorage.getItem("jwt_token")
           },
           method: "POST",
-          url: "http://localhost:8000/board/",
+          url: "http://13.231.90.159:8001/board/",
           data: {
             msg: this.model.content,
             signature: this.model.signature

@@ -78,7 +78,7 @@ export default {
       try{
         let resp = await axios({
         method:'POST',
-        url: 'http://localhost:8000/token/',
+        url: 'http://13.231.90.159:8001/token/',
         data: {
           username: this.model.username,
           password: this.model.password
