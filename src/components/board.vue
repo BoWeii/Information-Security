@@ -96,7 +96,7 @@ export default {
             Authorization: "JWT" + " " + localStorage.getItem("jwt_token")
           },
           method: "POST",
-          url: "http://13.231.90.159:8001/board/",
+          url: "http://127.0.0.1:8000/board/",
           data: {
             msg: this.model.content,
             signature: this.model.signature
